@@ -4,6 +4,8 @@ Draw pixel bluetooth
 Dibujo de pixeles en una pantalla LCD de 80x160 pixeles con controlador ST7735 y comunicacion SPI. La pantalla se controla a traves de comunicacion bluetooth entre
 un dispositivo android con una aplicación desarrollada en App Inventor y un microcontrolador ESP32.
 
+![image](https://user-images.githubusercontent.com/52707509/149042282-1552dcf6-3b16-4f04-8cfa-b8941cef1654.png)
+
 
 This is a template application to be used with [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).
 
