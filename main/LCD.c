@@ -297,6 +297,15 @@ void lcd_spi_pre_transfer_callback(spi_transaction_t *t)
     gpio_set_level(DC_PIN, dc);
 }
 
+/*	@brief	Go to pixel screen.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x_start	X pixel for begin window.
+ * 	@param	 y_start	Y pixel for begin window.
+ * 	@param	 x_end		X pixel for end window.
+ * 	@param	 y_end		Y pixel for end window.
+ *
+ */
 void lcd_set_cursor(spi_device_handle_t spi, uint8_t x_start, uint8_t y_start,
 		uint8_t x_end, uint8_t  y_end)
 {
@@ -319,6 +328,12 @@ void lcd_set_cursor(spi_device_handle_t spi, uint8_t x_start, uint8_t y_start,
 	lcd_write_command(spi, 0x2C);
 }
 
+/*	@brief	Clear screen with color.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 color		Color for clear screen.
+ *
+ */
 void lcd_clear(spi_device_handle_t spi, uint16_t color)
 {
   	uint8_t buffer[2]={color>>8, color};
@@ -342,6 +357,14 @@ void lcd_clear(spi_device_handle_t spi, uint16_t color)
 
 }
 
+/*	@brief	Set color of screen pixel.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x 			X pixel of screen.
+ * 	@param	 y			Y pixel of screen.
+ * 	@param	 color		Color for set pixel.
+ *
+ */
 void lcd_set_pixel(spi_device_handle_t spi, uint8_t x, uint8_t y, uint16_t color)
 {
 	uint8_t buffer[2];
@@ -357,6 +380,16 @@ void lcd_set_pixel(spi_device_handle_t spi, uint8_t x, uint8_t y, uint16_t color
 
 }
 
+/*	@brief	Set color of screen pixel.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 image		matix of image.
+ * 	@param	 x_pos 		X pixel init.
+ * 	@param	 y_pos		Y pixel init.
+ * 	@param	 x_size		Weight of image.
+ * 	@param	 y_size		Height of image.
+ *
+ */
 void lcd_draw_image(spi_device_handle_t spi, const uint16_t *image,
 		uint8_t x_pos, uint8_t y_pos,
 		uint8_t x_size, uint8_t y_size)
@@ -388,7 +421,15 @@ void lcd_draw_image(spi_device_handle_t spi, const uint16_t *image,
 
 }
 
-
+/*	@brief	Convert 888 RGB to 565 RGB.
+ *
+ * 	@param   r		Red color value.
+ * 	@param	 g		Green color value.
+ * 	@param	 b		Blue color value.
+ *
+ * 	@return	Value of 565 RGB.
+ *
+ */
 uint16_t convert_from_rgb_8(uint8_t r, uint8_t g, uint8_t b)
 {
 	uint8_t r_5 = r>>3;
@@ -398,6 +439,14 @@ uint16_t convert_from_rgb_8(uint8_t r, uint8_t g, uint8_t b)
 	return (r_5<<11) | (g_6<<5) | (b_5);
 }
 
+/*	@brief	Draw batery on screen.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x	 		X pixel init.
+ * 	@param	 y			Y pixel init.
+ * 	@param	 level		Level of batery 0-10 to 0-100 percent.
+ *
+ */
 void lcd_draw_batery_widget(spi_device_handle_t spi, uint8_t x, uint8_t y, uint8_t level)
 {
 	//uint8_t buffer_line[2];
@@ -469,12 +518,25 @@ void lcd_draw_batery_widget(spi_device_handle_t spi, uint8_t x, uint8_t y, uint8
 
 }
 
-
+/*	@brief	Get brightness of screen.
+ *
+ * 	@param   return		Level of brightness (duty cycle).
+ *
+ */
 uint8_t lcd_get_constrast()
 {
 	return ledc_get_duty(LEDC_LOW_SPEED_MODE, BKL_TIMER_CH);
 }
 
+/*	@brief	Draw circle on screen.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x	 		X pixel init.
+ * 	@param	 y			Y pixel init.
+ * 	@param	 rad		Radious of circle in pixels.
+ * 	@param   color		Color of circle.
+ *
+ */
 void lcd_draw_circle(spi_device_handle_t spi, uint8_t x, uint8_t y,
 		uint8_t rad, uint16_t color)
 {
@@ -513,8 +575,16 @@ void lcd_draw_circle(spi_device_handle_t spi, uint8_t x, uint8_t y,
 	}
 }
 
-/*
- * percent 0-120
+/*	@brief	Load animation screen.
+ *
+ * 	@param   spi					Pointer to SPI bus.
+ * 	@param	 x	 					X pixel init.
+ * 	@param	 y						Y pixel init.
+ * 	@param	 rad					Radious of circle in pixels.
+ * 	@param   percent				Percent of load 0-120.
+ * 	@param	 color					Color of load animation.
+ * 	@param	 background_color		Color of no load animation.
+ *
  */
 void lcd_draw_circular_load_widget(spi_device_handle_t spi, uint8_t x, uint8_t y,
 		uint8_t rad, uint8_t percent, uint16_t color, uint16_t background_color)
@@ -541,6 +611,16 @@ void lcd_draw_circular_load_widget(spi_device_handle_t spi, uint8_t x, uint8_t y
     }
 }
 
+/*	@brief	Set color of window.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x0 		X pixel to begin.
+ * 	@param	 y0			Y pixel to begin.
+ * 	@param	 x1			X pixel of end.
+ * 	@param	 y1			Y pixel of end.
+ * 	@param	 color		color for set window.
+ *
+ */
 void lcd_set_window_color(spi_device_handle_t spi, uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, uint16_t color)
 {
   	uint8_t buffer[2]={color>>8, color};
@@ -562,6 +642,16 @@ void lcd_set_window_color(spi_device_handle_t spi, uint8_t x0, uint8_t y0, uint8
 	}
 }
 
+/*	@brief	Draw rect of screen.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+ * 	@param	 x 			X pixel to begin.
+ * 	@param	 y			Y pixel to begin.
+ * 	@param	 width		Width of rect.
+ * 	@param	 height		Height of rect.
+ * 	@param	 color		Color for rect.
+ *
+ */
 void lcd_draw_rect(spi_device_handle_t spi, uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint16_t color)
 {
   	uint8_t buffer[2]={color>>8, color};
@@ -592,6 +682,16 @@ void lcd_draw_rect(spi_device_handle_t spi, uint8_t x, uint8_t y, uint8_t width,
 	}
 }
 
+/*	@brief	Draw line on screen.
+ *
+ * 	@param   spi		Pointer to SPI bus.
+* 	@param	 x0 		X pixel to begin.
+ * 	@param	 y0			Y pixel to begin.
+ * 	@param	 x1			X pixel of end.
+ * 	@param	 y1			Y pixel of end.
+ * 	@param	 color		Color of line.
+ *
+ */
 void lcd_draw_line(spi_device_handle_t spi, uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1,
 		uint16_t color)
 {
